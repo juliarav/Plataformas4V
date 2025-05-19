@@ -19,4 +19,11 @@ public class CommandManager
     {
         commands[^1].Do();
     }
+
+    public void UndoCommand()
+    {
+        ICommand command = commands[^1];
+        commands.RemoveAt(commands.Count - 1);
+        command.Undo();
+    }
 }
