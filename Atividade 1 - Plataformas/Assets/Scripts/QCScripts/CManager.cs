@@ -1,0 +1,43 @@
+using UnityEngine;
+
+public class CManager : MonoBehaviour
+{
+    private Stack<InterfaceICommand> history = new Stack<ICommand>(); // history: armazena os comandos executados, para permitir desfazer (Undo).
+    private List<InterfaceICommand> replayLog = new List<ICommand>(); // replayLog: salva todos os comandos feitos para reproduzir depois (Replay).
+    
+    public void DoCommand(ICommand command)
+    {
+        command.Do(); // Executa o comando.
+        history.Push(command); // Salva o comando no histórico (para desfazer).
+        replayLog.Add(command); // Também adiciona no replay (para repetir no fim).
+    }
+    
+    public void Undo() // Desfaz o último comando, se houver algum no histórico.
+    {
+        if (history.Count > 0)
+        {
+            ICommand last = history.Pop();
+            last.Undo();
+        }
+    }
+    
+    public IEnumerator Replay() // Reexecuta todos os comandos feitos durante o jogo, com um atraso de 1 segundo entre eles.
+    {
+        foreach (InterfaceICommand cmd in replayLog)
+        {
+            cmd.Do();
+            yield return new WaitForSeconds(1f);
+        }
+
+        // exibir UI de vitória novamente
+    }
+    
+    public void SkipReplay()
+    {
+        foreach (ICommand cmd in replayLog)
+            cmd.Do();
+
+        // exibir UI de vitória novamente
+    }
+
+}
