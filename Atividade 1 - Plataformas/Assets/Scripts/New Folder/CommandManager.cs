@@ -15,7 +15,7 @@ public class CommandManager
         commands.Add(command);
     }
 
-    public void DoCommand()
+    public void DoCommand(InterfaceICommand cmd)
     {
         commands[^1].Do();
     }

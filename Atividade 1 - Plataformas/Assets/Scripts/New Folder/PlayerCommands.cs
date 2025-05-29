@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MoveRight : ICommand
+/*public class MoveRight : ICommand
 {
     private Transform mvPlayerTransform;
 
@@ -63,4 +63,4 @@ public class GetCoin : ICommand
         player.UndoLastCommand();
     }
 
-}
+} */

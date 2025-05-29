@@ -1,11 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CManager : MonoBehaviour
 {
-    private Stack<InterfaceICommand> history = new Stack<ICommand>(); // history: armazena os comandos executados, para permitir desfazer (Undo).
-    private List<InterfaceICommand> replayLog = new List<ICommand>(); // replayLog: salva todos os comandos feitos para reproduzir depois (Replay).
+    private Stack<InterfaceICommand> history = new Stack<InterfaceICommand>(); // history: armazena os comandos executados, para permitir desfazer (Undo).
+    private List<InterfaceICommand> replayLog = new List<InterfaceICommand>(); // replayLog: salva todos os comandos feitos para reproduzir depois (Replay).
     
-    public void DoCommand(ICommand command)
+    public void DoCommand(InterfaceICommand command)
     {
         command.Do(); // Executa o comando.
         history.Push(command); // Salva o comando no histórico (para desfazer).
@@ -16,12 +17,12 @@ public class CManager : MonoBehaviour
     {
         if (history.Count > 0)
         {
-            ICommand last = history.Pop();
+            InterfaceICommand last = history.Pop();
             last.Undo();
         }
     }
     
-    public IEnumerator Replay() // Reexecuta todos os comandos feitos durante o jogo, com um atraso de 1 segundo entre eles.
+    public IEnumerable<WaitForSeconds> Replay() // Reexecuta todos os comandos feitos durante o jogo, com um atraso de 1 segundo entre eles.
     {
         foreach (InterfaceICommand cmd in replayLog)
         {
@@ -34,7 +35,7 @@ public class CManager : MonoBehaviour
     
     public void SkipReplay()
     {
-        foreach (ICommand cmd in replayLog)
+        foreach (InterfaceICommand cmd in replayLog)
             cmd.Do();
 
         // exibir UI de vitória novamente
